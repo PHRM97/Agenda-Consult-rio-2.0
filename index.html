@@ -17,12 +17,17 @@
             color: white;
             text-align: center;
             padding: 1em 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
         .container {
             width: 80%;
             margin: auto;
             overflow: hidden;
             padding: 2em 0;
+            padding-top: 150px; /* Adiciona espaço para o cabeçalho fixo */
         }
         form {
             background: #fff;
@@ -30,7 +35,6 @@
             margin-bottom: 2em;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 91px;
         }
         form div {
             margin-bottom: 1em;
@@ -96,7 +100,7 @@
             <input type="time" id="hora" name="hora" required>
         </div>
         <div>
-            <label for="servico">Servico:</label>
+            <label for="servico">Serviço:</label>
             <select id="servico" name="servico" required>
                 <option value="implante">Implante</option>
                 <option value="cirurgia">Cirurgia</option>
