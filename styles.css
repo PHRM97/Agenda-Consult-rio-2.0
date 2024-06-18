@@ -5,14 +5,10 @@ body {
     background-color: #f7f7f7;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 header {
-    background-color: #4ca3af;
+    background-color: #4c9baf;
     color: white;
     text-align: center;
     padding: 1em 0;
@@ -28,7 +24,7 @@ header {
     margin: auto;
     overflow: hidden;
     padding: 2em 0;
-    padding-top: 150px; /* Adiciona espaço para o cabeçalho fixo */
+    padding-top: 180px; /* Adiciona mais espaço para o cabeçalho fixo */
 }
 
 form {
@@ -70,7 +66,7 @@ th, td {
 }
 
 th {
-    background-color: #4ca3af;
+    background-color: #4c9baf;
     color: white;
 }
 
@@ -85,5 +81,5 @@ th {
 }
 
 .btn.edit {
-    background-color: #4ca3af;
+    background-color: #4c9baf;
 }
