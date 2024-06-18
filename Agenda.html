@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Odontológica</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript">
+        let editIndex = -1;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarAgendamentos();
+
+            document.getElementById('agendaForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const nome = document.getElementById('nome').value;
+                const data = document.getElementById('data').value;
+                const hora = document.getElementById('hora').value;
+                const servico = document.getElementById('servico').value;
+
+                const agendamento = { nome, data, hora, servico };
+
+                let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+
+                if (editIndex === -1) {
+                    agendamentos.push(agendamento);
+                } else {
+                    agendamentos[editIndex] = agendamento;
+                    editIndex = -1;
+                }
+
+                agendamentos.sort((a, b) => new Date(a.data + 'T' + a.hora) - new Date(b.data + 'T' + b.hora));
+                localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+
+                atualizarTabelaDeAgendamentos();
+                document.getElementById('agendaForm').reset();
+            });
+        });
+
+        function adicionarAgendamentoNaTabela(agendamento, index) {
+            const table = document.getElementById('agendaTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            const cellNome = newRow.insertCell(0);
+            const cellData = newRow.insertCell(1);
+            const cellHora = newRow.insertCell(2);
+            const cellServico = newRow.insertCell(3);
+            const cellAcoes = newRow.insertCell(4);
+
+            cellNome.textContent = agendamento.nome;
+            cellData.textContent = agendamento.data;
+            cellHora.textContent = agendamento.hora;
+            cellServico.textContent = agendamento.servico;
+
+            const btnEditar = document.createElement('button');
+            btnEditar.textContent = 'Editar';
+            btnEditar.classList.add('btn', 'edit');
+            btnEditar.onclick = () => editarAgendamento(index);
+
+            const btnApagar = document.createElement('button');
+            btnApagar.textContent = 'Apagar';
+            btnApagar.classList.add('btn');
+            btnApagar.onclick = () => apagarAgendamento(index);
+
+            cellAcoes.appendChild(btnEditar);
+            cellAcoes.appendChild(btnApagar);
+        }
+
+        function atualizarTabelaDeAgendamentos() {
+            const tableBody = document.getElementById('agendaTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+            agendamentos.forEach((agendamento, index) => adicionarAgendamentoNaTabela(agendamento, index));
+        }
+
+        function carregarAgendamentos() {
+            atualizarTabelaDeAgendamentos();
+        }
+
+        function editarAgendamento(index) {
+            const agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+            const agendamento = agendamentos[index];
+
+            document.getElementById('nome').value = agendamento.nome;
+            document.getElementById('data').value = agendamento.data;
+            document.getElementById('hora').value = agendamento.hora;
+            document.getElementById('servico').value = agendamento.servico;
+
+            editIndex = index;
+        }
+
+        function apagarAgendamento(index) {
+            let agendamentos = JSON.parse(localStorage.getItem('agendamentos')) || [];
+            agendamentos.splice(index, 1);
+            localStorage.setItem('agendamentos', JSON.stringify(agendamentos));
+            atualizarTabelaDeAgendamentos();
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Clínica Odontológica - Agenda de Consultas</h1>
+</header>
+
+<div class="container">
+    <h2>Adicionar Novo Agendamento</h2>
+    <form id="agendaForm">
+        <div>
+            <label for="nome">Nome do Paciente:</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>
+        <div>
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+        </div>
+        <div>
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
+        </div>
+        <div>
+            <label for="servico">Serviço:</label>
+            <select id="servico" name="servico" required>
+                <option value="implante">Implante</option>
+                <option value="cirurgia">Cirurgia</option>
+                <option value="rotina">Rotina</option>
+                <option value="primeira_consulta">Primeira Consulta</option>
+            </select>
+        </div>
+        <button type="submit">Adicionar Agendamento</button>
+    </form>
+
+    <h2>Agendamentos</h2>
+    <table id="agendaTable">
+        <thead>
+            <tr>
+                <th>Nome do Paciente</th>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Serviço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Agendamentos serão inseridos aqui -->
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
